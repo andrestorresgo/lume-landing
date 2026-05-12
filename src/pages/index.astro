@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
 // Component Imports
-import Button from '../components/Button.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import background from '../assets/background.webp';
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -17,10 +19,11 @@ import Button from '../components/Button.astro';
 		<title>Astro + TailwindCSS</title>
 	</head>
 
-	<body>
-		<div class="grid place-items-center h-screen content-center">
-			<Button>Tailwind Button in Astro!</Button>
-			<a href="/markdown-page" class="p-4 underline">Markdown is also supported...</a>
-		</div>
+	<body class="bg-gray-50 dark:bg-zinc-950 font-sans antialiased overflow-x-hidden min-h-screen bg-cover bg-center bg-no-repeat" style={`background-image: url('${background.src}')`}>
+		<Header />
+		<!-- TODO: research better blur effect -->
+		<main class="backdrop-blur-3xl mask-to-t">
+			<Hero />
+		</main>
 	</body>
 </html>
