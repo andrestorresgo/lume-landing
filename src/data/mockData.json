@@ -1,0 +1,80 @@
+{
+  "pageTitle": "Colección Permanente",
+  "hero": {
+    "pretitle": "Colección Permanente",
+    "title": "Hecho a mano. Hecho para ti.",
+    "description": "Descubre nuestra selección de piezas atemporales. Cada diseño incorpora piedras naturales cuidadosamente seleccionadas, como roca de lava para la fuerza, ojo de tigre para la protección, y cuarzo claro para la claridad."
+  },
+  "stones": [
+    "Cuarzo Claro",
+    "Ojo de Tigre",
+    "Roca Volcánica",
+    "Ágata",
+    "Plata",
+    "Oro"
+  ],
+  "intentions": [
+    "Claridad",
+    "Protección",
+    "Fuerza",
+    "Equilibrio",
+    "Calma"
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Claridad Absoluta",
+      "description": "Cuarzo Claro & Plata 925",
+      "price": 120,
+      "tag": "Más Vendido",
+      "stone": "Cuarzo Claro",
+      "intention": "Claridad",
+      "isFeatured": false
+    },
+    {
+      "id": "2",
+      "name": "Escudo Natural",
+      "description": "Ojo de Tigre & Oro 14k",
+      "price": 95,
+      "tag": null,
+      "stone": "Ojo de Tigre",
+      "intention": "Protección",
+      "isFeatured": false
+    },
+    {
+      "id": "3",
+      "name": "Fuerza Terrestre",
+      "description": "Roca Volcánica & Ónix",
+      "price": 145,
+      "tag": "Nuevo",
+      "stone": "Roca Volcánica",
+      "intention": "Fuerza",
+      "isFeatured": false
+    },
+    {
+      "id": "4",
+      "name": "Colección \"Equilibrio\"",
+      "description": "Set de tres piezas diseñadas para usarse en conjunto. Cuarzo, Ágata y Roca Volcánica.",
+      "price": 250,
+      "tag": null,
+      "stone": "Ágata",
+      "intention": "Equilibrio",
+      "isFeatured": true
+    },
+    {
+      "id": "5",
+      "name": "Centro Calmo",
+      "description": "Ágata Blanca & Plata",
+      "price": 85,
+      "tag": null,
+      "stone": "Ágata",
+      "intention": "Calma",
+      "isFeatured": false
+    }
+  ],
+  "storytelling": {
+    "title": "El lenguaje de la tierra.",
+    "description": "Cada piedra es un testigo silencioso de la historia del planeta. Seleccionamos nuestros materiales no solo por su belleza visual, sino por la energía que aportan a quien los lleva.",
+    "linkText": "Nuestra Historia"
+  }
+}

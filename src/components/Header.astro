@@ -1,22 +1,43 @@
 ---
 import Button from './Button.astro';
+
+interface Props {
+  activePath?: string;
+  textColor?: string;
+  logoColor?: string;
+  activeColor?: string;
+  buttonClass?: string;
+}
+
+const { 
+  activePath = "/", 
+  textColor = "text-gray-200", 
+  logoColor = "text-gray-200",
+  activeColor = "text-purple-500",
+  buttonClass = "text-white border-white/10 hover:bg-white/10 focus:ring-white/10"
+} = Astro.props;
 ---
 
 <header class="absolute top-0 left-0 right-0 w-full flex items-center justify-between px-4 py-4 md:px-8 z-50">
     <div class="flex-1">
-        <p class="font-bold text-xl md:text-2xl text-gray-200">LUMÉ</p>
+        <a href="/" class={`font-bold text-xl md:text-2xl transition-colors ${logoColor} hover:opacity-80`}>LUMÉ</a>
     </div>
     
     <nav class="hidden md:block flex-1">
-        <ul class="flex gap-6 justify-center text-base md:text-lg font-bold text-gray-200">
-            <li class="hover:text-purple-600 cursor-pointer transition-colors">Inicio</li>
-            <li class="hover:text-purple-600 cursor-pointer transition-colors">Colecciones</li>
+        <ul class={`flex gap-6 justify-center text-base md:text-lg font-bold ${textColor}`}>
+            <li>
+                <a href="/" class={`transition-colors hover:text-purple-600 ${activePath === '/' ? activeColor : ''}`}>Inicio</a>
+            </li>
+            <li>
+                <a href="/colecciones" class={`transition-colors hover:text-purple-600 ${activePath === '/colecciones' ? activeColor : ''}`}>Colecciones</a>
+            </li>
             <li class="hover:text-purple-600 cursor-pointer transition-colors">Sobre nosotros</li>
             <li class="hover:text-purple-600 cursor-pointer transition-colors">Contacto</li>
         </ul>
     </nav>
     
     <div class="flex-1 flex justify-end">
-        <Button>Contactanos</Button>
+        <Button class={buttonClass}>Contactanos</Button>
     </div>
 </header>
+
