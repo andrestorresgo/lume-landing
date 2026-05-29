@@ -48,6 +48,11 @@ export default function CollectionsPage({ placeholderImage }: CollectionsPagePro
   const [selectedStone, setSelectedStone] = useState<string | null>(null)
   const [selectedIntention, setSelectedIntention] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<string>("featured")
+  const [shouldBump, setShouldBump] = useState(false)
+
+  const handleAnimationEnd = useCallback(() => {
+    setShouldBump(false)
+  }, [])
 
   // Cart operations (Memoized callbacks)
   const addToCart = useCallback((product: Product) => {
@@ -63,6 +68,7 @@ export default function CollectionsPage({ placeholderImage }: CollectionsPagePro
       return [...prevCart, { product, quantity: 1 }]
     })
     setIsCartOpen(true)
+    setShouldBump(true)
   }, [])
 
   const updateQuantity = useCallback((productId: string, delta: number) => {
@@ -147,13 +153,14 @@ export default function CollectionsPage({ placeholderImage }: CollectionsPagePro
       {/* Floating Cart Trigger */}
       <button 
         onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-8 right-8 z-50 flex items-center justify-center bg-[#7C0A12] hover:bg-[#560006] text-white size-14 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group"
+        onAnimationEnd={handleAnimationEnd}
+        className={`fixed bottom-8 right-8 z-50 flex items-center justify-center bg-[#7C0A12] hover:bg-[#560006] text-white size-14 rounded-full shadow-2xl transition-[transform,background-color] duration-200 ease-out active:scale-95 group ${shouldBump ? 'animate-cart-bump' : 'hover:scale-105'}`}
         aria-label="Ver bolsa de compras"
       >
         <div className="relative">
-          <ShoppingBag size={24} className="group-hover:animate-bounce" />
+          <ShoppingBag size={24} className="group-hover-bag-wiggle" />
           {cartCount > 0 ? (
-            <span className="absolute -top-2 -right-2 bg-[#1C1917] text-white text-[10px] font-bold size-5 rounded-full flex items-center justify-center border border-[#fbf9f6]">
+            <span className="absolute -top-2 -right-2 bg-[#1C1917] text-white text-[10px] font-bold size-5 rounded-full flex items-center justify-center border border-[#fbf9f6] animate-badge-pop">
               {cartCount}
             </span>
           ) : null}
@@ -284,19 +291,19 @@ export default function CollectionsPage({ placeholderImage }: CollectionsPagePro
             {featuredProduct ? (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-4">
                 <div className="lg:col-span-7 group flex flex-col">
-                  <div className="relative overflow-hidden aspect-[4/5] bg-[#efeeeb] border border-[#78716C]/15 transition-transform duration-500 hover:scale-[1.005]">
+                  <div className="relative overflow-hidden aspect-[4/5] bg-[#efeeeb] border border-[#78716C]/15 card-image-container">
                     <img 
                       src={placeholderImage} 
                       alt={featuredProduct.name} 
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-103"
+                      className="w-full h-full object-cover card-image"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
-                    <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-full group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
+                    <div className="absolute bottom-0 left-0 w-full p-6 quick-add-container z-20">
                       <Button 
                         onClick={handleAddFeatured}
-                        className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-wider font-semibold rounded-none transition-colors"
+                        className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-wider font-semibold rounded-none quick-add-button"
                       >
                         Agregar Set - ${featuredProduct.price}
                       </Button>
@@ -305,7 +312,7 @@ export default function CollectionsPage({ placeholderImage }: CollectionsPagePro
                   
                   <div className="flex justify-between items-start mt-6">
                     <div className="flex flex-col gap-1">
-                      <h3 className="font-heading text-2xl text-[#1C1917] font-medium leading-tight">
+                      <h3 className="font-heading text-2xl text-[#1C1917] font-medium leading-tight card-title-link">
                         {featuredProduct.name}
                       </h3>
                       <p className="text-sm text-[#78716C] max-w-md font-light leading-relaxed">

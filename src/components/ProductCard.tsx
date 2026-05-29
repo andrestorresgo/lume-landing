@@ -36,12 +36,12 @@ const ProductCard = React.memo(function ProductCard({
 
   return (
     <Card className="group border-0 bg-transparent flex flex-col relative overflow-hidden ring-0 shadow-none gap-0">
-      <div className="relative overflow-hidden aspect-[3/4] bg-[#efeeeb] mb-4 border border-[#78716C]/15 transition-transform duration-500 hover:scale-[1.01]">
+      <div className="relative overflow-hidden aspect-[3/4] bg-[#efeeeb] mb-4 border border-[#78716C]/15 card-image-container">
         {/* Image Layer */}
         <img 
           src={placeholderImage} 
           alt={product.name} 
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="w-full h-full object-cover card-image"
           loading="lazy"
         />
         
@@ -58,10 +58,10 @@ const ProductCard = React.memo(function ProductCard({
         ) : null}
 
         {/* Quick Add Overlay */}
-        <div className="absolute bottom-0 left-0 w-full p-4 transform translate-y-full group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
+        <div className="absolute bottom-0 left-0 w-full p-4 quick-add-container z-20">
           <Button 
             onClick={handleAdd}
-            className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-5 text-[10px] uppercase tracking-wider font-semibold rounded-none transition-colors"
+            className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-5 text-[10px] uppercase tracking-wider font-semibold rounded-none quick-add-button"
           >
             Agregar a Bolsa - ${product.price}
           </Button>
@@ -70,7 +70,7 @@ const ProductCard = React.memo(function ProductCard({
 
       <CardHeader className="p-0 gap-1 flex flex-row items-start justify-between">
         <div className="flex flex-col gap-0.5">
-          <CardTitle className="font-heading text-lg text-[#1C1917] font-medium leading-tight">
+          <CardTitle className="font-heading text-lg text-[#1C1917] font-medium leading-tight card-title-link">
             {product.name}
           </CardTitle>
           <CardDescription className="text-xs text-[#78716C] font-light">

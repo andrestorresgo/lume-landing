@@ -1,5 +1,4 @@
 ---
-// Click button, get confetti!
 // Styled by Tailwind :)
 interface Props {
 	class?: string;
@@ -8,17 +7,31 @@ const { class: className = "text-white border-white/10 hover:bg-white/10 focus:r
 ---
 
 <button
-	class={`appearance-none py-2 px-4 bg-transparent font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 border ${className}`}
+	data-confetti-button
+	class={`custom-button appearance-none py-2.5 px-6 bg-transparent font-semibold rounded-none shadow-sm focus:outline-none focus:ring-1 border ${className}`}
 >
 	<slot />
 </button>
 
+<style>
+  .custom-button {
+    transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease, border-color 150ms ease;
+  }
+  
+  .custom-button:active {
+    transform: scale(0.97);
+  }
+</style>
 
 <script>
 	import confetti from 'canvas-confetti';
-	const button = document.body.querySelector('button');
+	const buttons = document.querySelectorAll('[data-confetti-button]');
 
-	if (button) {
-		button.addEventListener('click', () => confetti());
-	}
+	buttons.forEach(button => {
+		// Avoid duplicate listeners
+		if (button.getAttribute('data-has-confetti') !== 'true') {
+			button.setAttribute('data-has-confetti', 'true');
+			button.addEventListener('click', () => confetti());
+		}
+	});
 </script>

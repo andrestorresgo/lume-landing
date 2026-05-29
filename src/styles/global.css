@@ -134,3 +134,164 @@
     @apply font-sans;
   }
 }
+
+/* LUMÉ Design System Custom Micro-interactions */
+
+@keyframes cart-bump {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.18); }
+  45% { transform: scale(0.92); }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.animate-cart-bump {
+  animation: cart-bump 350ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes badge-pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-badge-pop {
+  animation: badge-pop 200ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes bag-wiggle {
+  0% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-3px) rotate(-5deg); }
+  50% { transform: translateY(-3px) rotate(3deg); }
+  75% { transform: translateY(-0.5px) rotate(-1deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+.group-hover-bag-wiggle {
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .group-hover-bag-wiggle {
+    animation: bag-wiggle 500ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+}
+
+/* Product Card Custom Interactions */
+.card-image-container {
+  transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .card-image-container,
+  .card-image-container:hover {
+    transform: scale(1.008);
+  }
+}
+
+.card-image {
+  transition: transform 750ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .card-image {
+    transform: scale(1.03);
+  }
+}
+
+.quick-add-container {
+  transform: translateY(16px);
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1), opacity 200ms ease;
+}
+
+.group:hover .quick-add-container {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.quick-add-button {
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease !important;
+}
+
+.quick-add-button:active {
+  transform: scale(0.97) !important;
+}
+
+.card-title-link {
+  transition: color 250ms ease;
+}
+
+.group:hover .card-title-link {
+  color: #7C0A12;
+}
+
+/* Cart Item Row Animations */
+@keyframes row-enter {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-row-enter {
+  animation: row-enter 250ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes row-exit {
+  0% { 
+    opacity: 1; 
+    transform: translateX(0); 
+    max-height: 120px; 
+    padding-bottom: 24px;
+    margin-bottom: 0; 
+    border-bottom-width: 1px;
+  }
+  40% { 
+    opacity: 0; 
+    transform: translateX(-16px); 
+    max-height: 120px; 
+    padding-bottom: 24px;
+    margin-bottom: 0; 
+    border-bottom-width: 1px;
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateX(-16px); 
+    max-height: 0; 
+    padding-top: 0;
+    padding-bottom: 0; 
+    margin-bottom: -24px;
+    border-bottom-color: transparent;
+    border-bottom-width: 0;
+    overflow: hidden; 
+  }
+}
+
+.animate-row-exit {
+  animation: row-exit 380ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes qty-bump {
+  0% { transform: scale(0.92); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.animate-qty-bump {
+  animation: qty-bump 220ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.trash-button {
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trash-button:hover {
+    transform: scale(1.12) rotate(-8deg);
+  }
+}
+
+.trash-button:active {
+  transform: scale(0.9);
+}
