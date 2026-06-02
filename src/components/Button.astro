@@ -2,16 +2,28 @@
 // Styled by Tailwind :)
 interface Props {
 	class?: string;
+	href?: string;
+	target?: string;
+	rel?: string;
 }
-const { class: className = "text-white border-white/10 hover:bg-white/10 focus:ring-white/10" } = Astro.props;
+const { 
+	class: className = "text-white border-white/10 hover:bg-white/10 focus:ring-white/10",
+	href,
+	target,
+	rel
+} = Astro.props;
+
+const Element = href ? 'a' : 'button';
 ---
 
-<button
-	data-confetti-button
-	class={`custom-button appearance-none py-2.5 px-6 bg-transparent font-semibold rounded-none shadow-sm focus:outline-none focus:ring-1 border ${className}`}
+<Element
+	href={href}
+	target={target}
+	rel={rel}
+	class={`custom-button appearance-none py-2.5 px-6 bg-transparent font-semibold rounded-none shadow-sm focus:outline-none focus:ring-1 border inline-block text-center ${className}`}
 >
 	<slot />
-</button>
+</Element>
 
 <style>
   .custom-button {
@@ -23,15 +35,3 @@ const { class: className = "text-white border-white/10 hover:bg-white/10 focus:r
   }
 </style>
 
-<script>
-	import confetti from 'canvas-confetti';
-	const buttons = document.querySelectorAll('[data-confetti-button]');
-
-	buttons.forEach(button => {
-		// Avoid duplicate listeners
-		if (button.getAttribute('data-has-confetti') !== 'true') {
-			button.setAttribute('data-has-confetti', 'true');
-			button.addEventListener('click', () => confetti());
-		}
-	});
-</script>

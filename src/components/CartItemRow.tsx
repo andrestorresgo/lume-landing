@@ -98,10 +98,10 @@ const CartItemRow = React.memo(function CartItemRow({
       </div>
       <div className="text-right shrink-0">
         <span key={item.quantity * item.product.price} className="font-heading text-sm font-semibold text-[#1C1917] inline-block animate-qty-bump">
-          ${item.product.price * item.quantity}
+          Bs. {item.product.price * item.quantity}
         </span>
         {item.quantity > 1 ? (
-          <span className="block text-[10px] text-[#78716C] mt-0.5">${item.product.price} c/u</span>
+          <span className="block text-[10px] text-[#78716C] mt-0.5">Bs. {item.product.price} c/u</span>
         ) : null}
       </div>
     </div>

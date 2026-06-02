@@ -1,5 +1,5 @@
 ---
-import Button from './Button.astro';
+import Button from "./Button.astro";
 
 interface Props {
   activePath?: string;
@@ -10,65 +10,97 @@ interface Props {
   buttonClass?: string;
 }
 
-const { 
-  activePath = "/", 
-  textColor = "text-[#FBF9F6]", 
+const {
+  activePath = "/",
+  textColor = "text-[#FBF9F6]",
   logoColor = "text-[#FBF9F6]",
   activeColor = "text-[#ff827a]",
-  hoverColor = activeColor === "text-[#7C0A12]" ? "hover:text-[#7C0A12]" : "hover:text-[#ff827a]",
-  buttonClass = "text-[#FBF9F6] border-[#FBF9F6]/20 hover:bg-[#FBF9F6]/10 focus:ring-[#FBF9F6]/20"
+  hoverColor = activeColor === "text-[#7C0A12]"
+    ? "hover:text-[#7C0A12]"
+    : "hover:text-[#ff827a]",
+  buttonClass = "text-[#FBF9F6] border-[#FBF9F6]/20 hover:bg-[#FBF9F6]/10 focus:ring-[#FBF9F6]/20",
 } = Astro.props;
 ---
 
-<header class="absolute top-0 left-0 right-0 w-full flex items-center justify-between px-4 py-6 md:px-8 z-50 nav-font">
-    <div class="flex-1">
-        <a href="/" class={`logo-link font-heading text-2xl tracking-tighter transition-opacity ${logoColor} hover:opacity-80`}>
-            LUMÉ
+<header
+  class="absolute top-0 left-0 right-0 w-full flex items-center justify-between px-4 py-6 md:px-8 z-50 nav-font"
+>
+  <div class="flex-1">
+    <a
+      href="/"
+      class={`logo-link font-heading text-2xl tracking-tighter transition-opacity ${logoColor} hover:opacity-80`}
+    >
+      LUMÉ
+    </a>
+  </div>
+
+  <nav class="hidden md:block flex-1">
+    <ul
+      class={`flex gap-10 justify-center text-[10px] md:text-xs uppercase tracking-widest font-semibold ${textColor}`}
+    >
+      <li>
+        <a
+          href="/"
+          class={`nav-link ${activePath === "/" ? "active " + activeColor : ""} ${hoverColor}`}
+        >
+          Inicio
         </a>
-    </div>
-    
-    <nav class="hidden md:block flex-1">
-        <ul class={`flex gap-10 justify-center text-[10px] md:text-xs uppercase tracking-widest font-semibold ${textColor}`}>
-            <li>
-                <a href="/" class={`nav-link ${activePath === '/' ? 'active ' + activeColor : ''} ${hoverColor}`}>
-                    Inicio
-                </a>
-            </li>
-            <li>
-                <a href="/colecciones" class={`nav-link ${activePath === '/colecciones' ? 'active ' + activeColor : ''} ${hoverColor}`}>
-                    Colecciones
-                </a>
-            </li>
-            <li>
-                <span class={`nav-link cursor-pointer ${hoverColor}`}>
-                    Sobre nosotros
-                </span>
-            </li>
-            <li>
-                <span class={`nav-link cursor-pointer ${hoverColor}`}>
-                    Contacto
-                </span>
-            </li>
-        </ul>
-    </nav>
-    
-    <div class="flex-1 flex justify-end">
-        <Button class={`text-[10px] uppercase tracking-widest ${buttonClass}`}>Contactanos</Button>
-    </div>
+      </li>
+      <li>
+        <a
+          href="/colecciones"
+          class={`nav-link ${activePath === "/colecciones" ? "active " + activeColor : ""} ${hoverColor}`}
+        >
+          Colecciones
+        </a>
+      </li>
+      <li>
+        <span class={`nav-link cursor-pointer ${hoverColor}`}>
+          Sobre nosotros
+        </span>
+      </li>
+      <li>
+        <span class={`nav-link cursor-pointer ${hoverColor}`}> Contacto </span>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="flex-1 flex justify-end">
+    <Button
+      href="https://wa.me/59175799191?text=Hola,%20me%20gustaria%20obtener%20más%20información%20sobre%20sus%20productos"
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`text-[10px] uppercase tracking-widest ${buttonClass}`}
+    >
+      Contactanos
+    </Button>
+  </div>
 </header>
 
 <style>
   .nav-font {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
   }
-  
+
   .font-heading {
-    font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", Times, serif;
+    font-family:
+      "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
   }
 
   .logo-link {
     display: inline-block;
-    transition: opacity 200ms ease, transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition:
+      opacity 200ms ease,
+      transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .logo-link:active {
@@ -83,7 +115,7 @@ const {
   }
 
   .nav-link::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -100,5 +132,3 @@ const {
     transform: scaleX(1);
   }
 </style>
-
-

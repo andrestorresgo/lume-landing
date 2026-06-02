@@ -63,7 +63,7 @@ const ProductCard = React.memo(function ProductCard({
             onClick={handleAdd}
             className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-5 text-[10px] uppercase tracking-wider font-semibold rounded-none quick-add-button"
           >
-            Agregar a Bolsa - ${product.price}
+            Agregar a Bolsa - Bs. {product.price}
           </Button>
         </div>
       </div>
@@ -78,7 +78,7 @@ const ProductCard = React.memo(function ProductCard({
           </CardDescription>
         </div>
         <span className="font-heading text-base font-semibold text-[#1C1917] shrink-0 mt-0.5">
-          ${product.price}
+          Bs. {product.price}
         </span>
       </CardHeader>
     </Card>

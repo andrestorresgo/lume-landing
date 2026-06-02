@@ -222,7 +222,7 @@ export default function CollectionsPage({
             <SheetFooter className="p-6 border-t border-[#78716C]/10 bg-[#f5f3f0] flex flex-col gap-4">
               <div className="flex justify-between items-center w-full">
                 <span className="font-heading text-lg text-[#1C1917] font-semibold">Subtotal</span>
-                <span className="font-heading text-xl text-[#7C0A12] font-bold">${cartSubtotal} USD</span>
+                <span className="font-heading text-xl text-[#7C0A12] font-bold">Bs. {cartSubtotal} USD</span>
               </div>
               <p className="text-[10px] text-[#78716C] text-left">
                 Envío gratuito en todas las piezas de la colección. Las tarifas de impuestos se calcularán en el pago.
@@ -317,7 +317,7 @@ export default function CollectionsPage({
                         onClick={handleAddFeatured}
                         className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-wider font-semibold rounded-none quick-add-button"
                       >
-                        Agregar Set - ${featuredProduct.price}
+                        Agregar Set - Bs. {featuredProduct.price}
                       </Button>
                     </div>
                   </div>
@@ -332,7 +332,7 @@ export default function CollectionsPage({
                       </p>
                     </div>
                     <span className="font-heading text-lg font-bold text-[#1C1917] shrink-0 mt-1">
-                      ${featuredProduct.price}
+                      Bs. {featuredProduct.price}
                     </span>
                   </div>
                 </div>
@@ -357,14 +357,14 @@ export default function CollectionsPage({
                     </div>
                     <div className="flex justify-between text-xs py-2 border-b border-[#78716C]/10 text-[#1C1917]">
                       <span className="font-semibold">Origen</span>
-                      <span>Hecho a mano en México</span>
+                      <span>Hecho a mano en Bolivia</span>
                     </div>
                   </div>
                   <Button 
                     onClick={handleAddFeatured}
                     className="bg-[#1C1917] hover:bg-[#7C0A12] text-white text-xs uppercase tracking-widest px-8 py-5 h-auto rounded-none mt-4 transition-colors duration-300"
                   >
-                    Adquirir Set - ${featuredProduct.price}
+                    Adquirir Set - Bs. {featuredProduct.price}
                   </Button>
                 </div>
               </div>
