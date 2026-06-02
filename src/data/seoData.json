@@ -1,0 +1,87 @@
+{
+  "stones": {
+    "cuarzo-claro": {
+      "name": "Cuarzo Claro",
+      "title": "Joyería de Cuarzo Claro - Piezas de Intención | LUMÉ",
+      "metaDescription": "Explora nuestra selección de joyas con Cuarzo Claro hechas a mano. El cuarzo claro es el amplificador de energía definitivo, perfecto para la claridad y el enfoque.",
+      "heroTitle": "Cuarzo Claro:\nClaridad y Amplificación",
+      "heroDescription": "Conocido como el maestro sanador, el Cuarzo Claro purifica la energía y enfoca el pensamiento. Cada pieza incorpora cristales seleccionados por su transparencia única y tallados a mano.",
+      "longCopy": "El cuarzo claro es una gema de estructura cristalina hexagonal, apreciada desde la antigüedad por su capacidad para recibir, almacenar y amplificar la energía. En la joyería de intención de LUMÉ, combinamos este cristal con plata de ley 925 para crear un amuleto sutil pero poderoso, diseñado para mantener la mente alineada con tus verdaderos propósitos.",
+      "intention": "Claridad"
+    },
+    "ojo-de-tigre": {
+      "name": "Ojo de Tigre",
+      "title": "Joyería de Ojo de Tigre - Piezas de Intención | LUMÉ",
+      "metaDescription": "Joyas de Ojo de Tigre hechas a mano en plata y oro. Potencia tu protección, confianza y fuerza interior con gemas naturales auténticas.",
+      "heroTitle": "Ojo de Tigre:\nProtección y Fuerza Mental",
+      "heroDescription": "El Ojo de Tigre es un mineral de colores cálidos y brillo sedoso. Aporta protección energética, equilibrio emocional y el valor necesario para afrontar retos.",
+      "longCopy": "Esta piedra semipreciosa, famosa por su efecto de chatoyancy o reflejo de ojo de gato, ha sido usada históricamente por guerreros como un escudo protector. En LUMÉ, diseñamos nuestras pulseras y collares de Ojo de Tigre pensando en quienes buscan un recordatorio diario de su fuerza interna y resiliencia espiritual.",
+      "intention": "Protección"
+    },
+    "roca-volcanica": {
+      "name": "Roca Volcánica",
+      "title": "Joyería de Roca Volcánica - Piezas de Intención | LUMÉ",
+      "metaDescription": "Descubre pulseras y joyas de Roca Volcánica hechas a mano. Conecta con el arraigo y la fuerza de la tierra a través de piedras volcánicas naturales.",
+      "heroTitle": "Roca Volcánica:\nArraigo y Vitalidad",
+      "heroDescription": "Nacida del fuego de la tierra, la piedra de lava o Roca Volcánica simboliza el renacimiento y el arraigo. Perfecta para disipar la ira y aportar estabilidad emocional.",
+      "longCopy": "Las piedras volcánicas son porosas, táctiles y guardan una profunda conexión con el núcleo de la Tierra. Esta joyería es ideal para recordarte la importancia de mantener los pies en el suelo mientras buscas tus metas. Su textura áspera y oscura contrasta maravillosamente con metales pulidos, creando un diseño rústico y sofisticado.",
+      "intention": "Fuerza"
+    },
+    "agata": {
+      "name": "Ágata",
+      "title": "Joyería de Ágata - Piezas de Intención | LUMÉ",
+      "metaDescription": "Compra joyas de Ágata artesanal. Encuentra equilibrio, calma mental y armonía física con collares y pulseras de ágata natural.",
+      "heroTitle": "Ágata:\nArmonía y Equilibrio",
+      "heroDescription": "El Ágata es un conjunto de variedades microcristalinas del cuarzo. Aporta calma, madurez y ayuda a sanar la tensión interna para lograr el equilibrio perfecto.",
+      "longCopy": "Caracterizada por sus bandas concéntricas de colores suaves, el ágata vibra a una frecuencia más lenta y estable, lo que la convierte en una gema excelente para equilibrar los aspectos físicos e intelectuales de tu ser. Nuestras piezas de ágata están pensadas para quienes buscan un oasis de calma en medio de la rutina.",
+      "intention": "Equilibrio"
+    }
+  },
+  "intentions": {
+    "claridad": {
+      "name": "Claridad",
+      "title": "Joyería para la Claridad - Piedras Naturales | LUMÉ",
+      "metaDescription": "Joyas hechas a mano diseñadas para potenciar tu enfoque y claridad mental. Explora collares y pulseras con Cuarzo Claro y gemas naturales.",
+      "heroTitle": "Intención: Claridad\nLimpia tu mente y enfoca tu camino",
+      "heroDescription": "Piezas creadas con gemas de alta vibración que actúan como prismas de luz, despejando la niebla mental y ayudándote a tomar decisiones con total coherencia y honestidad.",
+      "longCopy": "La claridad no es solo la ausencia de confusión, sino la presencia de una visión profunda sobre quién eres y qué deseas manifestar. Esta colección reúne joyas que incorporan cuarzos y metales puros, diseñados para servir como anclajes de atención y lucidez en momentos de cambio.",
+      "stone": "Cuarzo Claro"
+    },
+    "proteccion": {
+      "name": "Protección",
+      "title": "Joyería para la Protección - Piedras Naturales | LUMÉ",
+      "metaDescription": "Protege tu paz energética con amuletos y pulseras de protección. Diseños artesanales con Ojo de Tigre y gemas protectoras auténticas.",
+      "heroTitle": "Intención: Protección\nEscudos de energía sutil",
+      "heroDescription": "Encuentra calma y cobijo espiritual en nuestras piezas hechas con Ojo de Tigre y metales protectores. Amuleto de seguridad contra vibraciones densas y estrés cotidiano.",
+      "longCopy": "Nuestra colección de protección está pensada para actuar como un filtro energético personal. Al utilizar gemas tradicionales de resguardo como el Ojo de Tigre, estas joyas no solo complementan tu estilo, sino que te recuerdan establecer límites saludables y resguardar tu paz interior a donde quiera que vayas.",
+      "stone": "Ojo de Tigre"
+    },
+    "fuerza": {
+      "name": "Fuerza",
+      "title": "Joyería para la Fuerza y Determinación | LUMÉ",
+      "metaDescription": "Potencia tu valor y vitalidad física y mental con joyas de Roca Volcánica y gemas de arraigo hechas a mano. Diseños con intención masculina y femenina.",
+      "heroTitle": "Intención: Fuerza\nFuego interior y estabilidad",
+      "heroDescription": "Canaliza el poder del fuego y la tierra con piezas de Roca Volcánica. Diseñadas para infundir perseverancia, fuerza mental y recordarte tu poder de resiliencia.",
+      "longCopy": "La fuerza no siempre es ruidosa; muchas veces es la persistencia silenciosa de la piedra volcánica que resiste las mareas del tiempo. Esta selección reúne piezas de carácter fuerte, texturas rugosas y materiales terrestres para conectarte con tu instinto de superación y tu capacidad de adaptarte a cualquier desafío.",
+      "stone": "Roca Volcánica"
+    },
+    "equilibrio": {
+      "name": "Equilibrio",
+      "title": "Joyería para el Equilibrio y la Armonía | LUMÉ",
+      "metaDescription": "Armoniza tus energías físicas y espirituales con joyas de Ágata y gemas de balance. Diseños artesanales creados para un estilo de vida consciente.",
+      "heroTitle": "Intención: Equilibrio\nCentrado en el aquí y el ahora",
+      "heroDescription": "Joyas que combinan la estabilidad del ágata y el balance energético para ayudarte a integrar tu cuerpo, mente y espíritu en un estado de bienestar unificado.",
+      "longCopy": "El equilibrio consiste en aprender a balancearse en el centro del cambio continuo. Nuestras piezas de la línea de equilibrio están diseñadas con gemas estabilizadoras que promueven la autoaceptación y fortalecen la concentración mental, ayudando a sincronizar tus energías sutiles con tu rutina física.",
+      "stone": "Ágata"
+    },
+    "calma": {
+      "name": "Calma",
+      "title": "Joyería para la Calma y la Paz Interior | LUMÉ",
+      "metaDescription": "Encuentra serenidad en tu día a día. Joyas artesanales con piedras de calma emocional y ágata blanca diseñadas para aliviar la ansiedad.",
+      "heroTitle": "Intención: Calma\nUn respiro de serenidad",
+      "heroDescription": "Lleva la calma contigo. Piezas diseñadas con piedras naturales de tonos suaves y energías tranquilizantes, ideales para recordarte respirar y regresar a tu centro de paz.",
+      "longCopy": "En un mundo sobreestimulado, la calma es una virtud y un refugio necesario. Esta joyería utiliza variedades seleccionadas de ágata y metales nobles en acabados minimalistas que transmiten quietud y elegancia silenciosa, perfectas para acompañarte en tus rituales de meditación o en días de alta demanda emocional.",
+      "stone": "Ágata"
+    }
+  }
+}

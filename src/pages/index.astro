@@ -5,9 +5,34 @@ import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import background from '../assets/background.webp';
 import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import SEOMeta from '../components/SEOMeta.astro';
 
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+const homepageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://lume-landing-murex.vercel.app/#website",
+      "url": "https://lume-landing-murex.vercel.app/",
+      "name": "LUMÉ",
+      "description": "Joyería de intención y diseño hecha a mano con piedras naturales y metales nobles.",
+      "publisher": {
+        "@id": "https://lume-landing-murex.vercel.app/#organization"
+      },
+      "inLanguage": "es"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://lume-landing-murex.vercel.app/#organization",
+      "name": "LUMÉ Jewelry",
+      "url": "https://lume-landing-murex.vercel.app/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://lume-landing-murex.vercel.app/favicon.svg"
+      }
+    }
+  ]
+};
 ---
 
 <html lang="es">
@@ -18,7 +43,12 @@ import GoogleAnalytics from '../components/GoogleAnalytics.astro';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>LUMÉ - Joyería de Intención y Diseño</title>
+		
+		<SEOMeta 
+			title="LUMÉ - Joyería de Intención y Diseño Hecha a Mano"
+			description="Descubre piezas únicas de joyería hechas a mano con gemas naturales seleccionadas para acompañarte en tu día a día. Cuarzo, ojo de tigre y roca volcánica con plata y oro."
+			schema={homepageSchema}
+		/>
 		
 		<!-- Google Fonts for Editorial Aesthetic -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />

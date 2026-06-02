@@ -39,14 +39,26 @@ interface CartItem {
 
 interface CollectionsPageProps {
   placeholderImage: string;
+  initialStone?: string | null;
+  initialIntention?: string | null;
+  customHeroTitle?: string;
+  customHeroDescription?: string;
+  customPretitle?: string;
 }
 
-export default function CollectionsPage({ placeholderImage }: CollectionsPageProps) {
+export default function CollectionsPage({ 
+  placeholderImage,
+  initialStone = null,
+  initialIntention = null,
+  customHeroTitle,
+  customHeroDescription,
+  customPretitle
+}: CollectionsPageProps) {
   // States
   const [cart, setCart] = useState<CartItem[]>([])
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const [selectedStone, setSelectedStone] = useState<string | null>(null)
-  const [selectedIntention, setSelectedIntention] = useState<string | null>(null)
+  const [selectedStone, setSelectedStone] = useState<string | null>(initialStone)
+  const [selectedIntention, setSelectedIntention] = useState<string | null>(initialIntention)
   const [sortBy, setSortBy] = useState<string>("featured")
   const [shouldBump, setShouldBump] = useState(false)
 
@@ -229,14 +241,14 @@ export default function CollectionsPage({ placeholderImage }: CollectionsPagePro
       <section className="px-6 md:px-16 pt-32 pb-16 flex flex-col items-center text-center max-w-5xl mx-auto">
         <span className="text-xs uppercase tracking-widest text-[#78716C] font-semibold mb-4 flex items-center gap-1.5 justify-center">
           <Sparkle size={12} className="text-[#7C0A12]" />
-          {mockData.hero.pretitle}
+          {customPretitle || mockData.hero.pretitle}
         </span>
-        <h1 className="font-heading text-4xl md:text-6xl text-[#1C1917] mb-6 leading-tight max-w-4xl tracking-tight">
-          Hecho a mano. <br className="hidden md:block"/>Hecho para ti.
+        <h1 className="font-heading text-4xl md:text-6xl text-[#1C1917] mb-6 leading-tight max-w-4xl tracking-tight whitespace-pre-line">
+          {customHeroTitle ? customHeroTitle : <>Hecho a mano. <br className="hidden md:block"/>Hecho para ti.</>}
         </h1>
         <div className="w-12 h-0.5 bg-[#7C0A12] mb-6"></div>
         <p className="text-base md:text-lg text-[#625d5b] max-w-2xl mx-auto font-light leading-relaxed">
-          {mockData.hero.description}
+          {customHeroDescription || mockData.hero.description}
         </p>
       </section>
 
