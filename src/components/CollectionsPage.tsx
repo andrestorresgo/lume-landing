@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { 
   Sheet, 
@@ -20,6 +20,9 @@ import ProductCard from "./ProductCard"
 import CartItemRow from "./CartItemRow"
 import FilterSortBar from "./FilterSortBar"
 import StorytellingBlock from "./StorytellingBlock"
+import AuthModal from "./AuthModal"
+import { AuthProvider, useAuth } from "../context/AuthContext"
+import { supabase } from "../lib/supabaseClient"
 
 interface Product {
   id: string;
@@ -32,11 +35,6 @@ interface Product {
   isFeatured: boolean;
 }
 
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
 interface CollectionsPageProps {
   placeholderImage: string;
   initialStone?: string | null;
@@ -46,7 +44,7 @@ interface CollectionsPageProps {
   customPretitle?: string;
 }
 
-export default function CollectionsPage({ 
+function CollectionsPageContent({ 
   placeholderImage,
   initialStone = null,
   initialIntention = null,
@@ -54,50 +52,103 @@ export default function CollectionsPage({
   customHeroDescription,
   customPretitle
 }: CollectionsPageProps) {
-  // States
-  const [cart, setCart] = useState<CartItem[]>([])
-  const [isCartOpen, setIsCartOpen] = useState(false)
+  // Auth and Cart Context
+  const { 
+    user, 
+    cart, 
+    cartCount, 
+    cartSubtotal, 
+    isCartOpen, 
+    setIsCartOpen, 
+    addToCart, 
+    updateQuantity, 
+    removeFromCart,
+    clearCart
+  } = useAuth()
+
+  // Local States
+  const [products, setProducts] = useState<Product[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
   const [selectedStone, setSelectedStone] = useState<string | null>(initialStone)
   const [selectedIntention, setSelectedIntention] = useState<string | null>(initialIntention)
   const [sortBy, setSortBy] = useState<string>("featured")
   const [shouldBump, setShouldBump] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [shouldCheckoutAfterLogin, setShouldCheckoutAfterLogin] = useState(false)
+
+  // Fetch products from database
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .order("created_at", { ascending: true })
+
+        if (error) throw error
+
+        if (data && data.length > 0) {
+          setProducts(
+            data.map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              description: p.description,
+              price: Number(p.price),
+              tag: p.tag,
+              stone: p.stone,
+              intention: p.intention,
+              isFeatured: p.is_featured,
+            }))
+          )
+        } else {
+          // Seeding fallback
+          setProducts(mockData.products as Product[])
+        }
+      } catch (err) {
+        console.error("Failed to load products from Supabase:", err)
+        // Fallback to local mock data
+        setProducts(mockData.products as Product[])
+      } finally {
+        setLoadingProducts(false)
+      }
+    }
+    loadProducts()
+  }, [])
+
+  // Animate cart floating button when count increases
+  useEffect(() => {
+    if (cartCount > 0) {
+      setShouldBump(true)
+    }
+  }, [cartCount])
 
   const handleAnimationEnd = useCallback(() => {
     setShouldBump(false)
   }, [])
 
-  // Cart operations (Memoized callbacks)
-  const addToCart = useCallback((product: Product) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find(item => item.product.id === product.id)
-      if (existing) {
-        return prevCart.map(item => 
-          item.product.id === product.id 
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      }
-      return [...prevCart, { product, quantity: 1 }]
-    })
-    setIsCartOpen(true)
-    setShouldBump(true)
-  }, [])
+  // Checkout Gate
+  const handleCheckout = useCallback(async (activeUser = user) => {
+    if (!activeUser) {
+      setShouldCheckoutAfterLogin(true)
+      setIsAuthModalOpen(true)
+      return
+    }
 
-  const updateQuantity = useCallback((productId: string, delta: number) => {
-    setCart((prevCart) => {
-      return prevCart.map(item => {
-        if (item.product.id === productId) {
-          const newQty = item.quantity + delta
-          return newQty > 0 ? { ...item, quantity: newQty } : null
+    setIsCartOpen(false)
+    window.location.href = "/checkout"
+  }, [user, setIsCartOpen])
+
+  const handleAuthSuccess = useCallback(() => {
+    if (shouldCheckoutAfterLogin) {
+      setShouldCheckoutAfterLogin(false)
+      // Retrieve the freshly logged in user to bypass context sync delay
+      supabase.auth.getUser().then(({ data: { user: freshlyLoggedInUser } }) => {
+        if (freshlyLoggedInUser) {
+          handleCheckout(freshlyLoggedInUser)
         }
-        return item
-      }).filter((item): item is CartItem => item !== null)
-    })
-  }, [])
-
-  const removeFromCart = useCallback((productId: string) => {
-    setCart((prevCart) => prevCart.filter(item => item.product.id !== productId))
-  }, [])
+      })
+    }
+  }, [shouldCheckoutAfterLogin, handleCheckout])
 
   // Stable setters for Filters and Sort
   const handleSetStone = useCallback((stone: string | null) => {
@@ -112,17 +163,9 @@ export default function CollectionsPage({
     setSortBy(sort)
   }, [])
 
-  const cartCount = useMemo(() => {
-    return cart.reduce((total, item) => total + item.quantity, 0)
-  }, [cart])
-
-  const cartSubtotal = useMemo(() => {
-    return cart.reduce((total, item) => total + (item.product.price * item.quantity), 0)
-  }, [cart])
-
   // Filtering and Sorting
   const filteredProducts = useMemo(() => {
-    let result = [...mockData.products] as Product[]
+    let result = [...products]
 
     if (selectedStone) {
       result = result.filter(p => p.stone === selectedStone)
@@ -142,7 +185,7 @@ export default function CollectionsPage({
     }
 
     return result
-  }, [selectedStone, selectedIntention, sortBy])
+  }, [products, selectedStone, selectedIntention, sortBy])
 
   // Split into normal products and featured layout
   const normalProducts = useMemo(() => {
@@ -222,13 +265,14 @@ export default function CollectionsPage({
             <SheetFooter className="p-6 border-t border-[#78716C]/10 bg-[#f5f3f0] flex flex-col gap-4">
               <div className="flex justify-between items-center w-full">
                 <span className="font-heading text-lg text-[#1C1917] font-semibold">Subtotal</span>
-                <span className="font-heading text-xl text-[#7C0A12] font-bold">Bs. {cartSubtotal} USD</span>
+                <span className="font-heading text-xl text-[#7C0A12] font-bold">Bs. {cartSubtotal}</span>
               </div>
               <p className="text-[10px] text-[#78716C] text-left">
                 Envío gratuito en todas las piezas de la colección. Las tarifas de impuestos se calcularán en el pago.
               </p>
               <Button 
-                className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-widest font-semibold transition-all duration-300"
+                onClick={() => handleCheckout()}
+                className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-widest font-semibold transition-all duration-300 rounded-none h-auto cursor-pointer"
               >
                 Proceder al Pago
               </Button>
@@ -236,6 +280,13 @@ export default function CollectionsPage({
           ) : null}
         </SheetContent>
       </Sheet>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+      />
 
       {/* Editorial Header */}
       <section className="px-6 md:px-16 pt-32 pb-16 flex flex-col items-center text-center max-w-5xl mx-auto">
@@ -266,13 +317,17 @@ export default function CollectionsPage({
 
       {/* Main Grid */}
       <main className="max-w-7xl mx-auto px-6 md:px-16 flex flex-col gap-16">
-        {filteredProducts.length === 0 ? (
+        {loadingProducts ? (
+          <div className="text-center py-20 font-heading text-xl text-[#78716C] font-light">
+            Cargando colección...
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-[#78716C]/30 bg-[#f5f3f0] flex flex-col items-center gap-4">
             <p className="font-heading text-xl text-[#78716C]">No se encontraron piezas</p>
             <p className="text-xs text-[#78716C]/85">Intenta cambiar tus filtros o criterios de búsqueda.</p>
             <Button 
               onClick={() => { setSelectedStone(null); setSelectedIntention(null); setSortBy("featured"); }}
-              className="bg-[#1C1917] hover:bg-[#7C0A12] text-white text-xs uppercase tracking-wider px-6"
+              className="bg-[#1C1917] hover:bg-[#7C0A12] text-white text-xs uppercase tracking-wider px-6 rounded-none h-auto cursor-pointer"
             >
               Restablecer todo
             </Button>
@@ -315,7 +370,7 @@ export default function CollectionsPage({
                     <div className="absolute bottom-0 left-0 w-full p-6 quick-add-container z-20">
                       <Button 
                         onClick={handleAddFeatured}
-                        className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-wider font-semibold rounded-none quick-add-button"
+                        className="w-full bg-[#1C1917] hover:bg-[#7C0A12] text-white py-6 text-xs uppercase tracking-wider font-semibold rounded-none quick-add-button h-auto"
                       >
                         Agregar Set - Bs. {featuredProduct.price}
                       </Button>
@@ -362,7 +417,7 @@ export default function CollectionsPage({
                   </div>
                   <Button 
                     onClick={handleAddFeatured}
-                    className="bg-[#1C1917] hover:bg-[#7C0A12] text-white text-xs uppercase tracking-widest px-8 py-5 h-auto rounded-none mt-4 transition-colors duration-300"
+                    className="bg-[#1C1917] hover:bg-[#7C0A12] text-white text-xs uppercase tracking-widest px-8 py-5 h-auto rounded-none mt-4 transition-colors duration-300 cursor-pointer"
                   >
                     Adquirir Set - Bs. {featuredProduct.price}
                   </Button>
@@ -373,5 +428,13 @@ export default function CollectionsPage({
         )}
       </main>
     </div>
+  )
+}
+
+export default function CollectionsPage(props: CollectionsPageProps) {
+  return (
+    <AuthProvider>
+      <CollectionsPageContent {...props} />
+    </AuthProvider>
   )
 }

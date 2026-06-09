@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro";
+import HeaderAuthControls from "./HeaderAuthControls.tsx";
 
 interface Props {
   activePath?: string;
@@ -65,7 +66,7 @@ const {
     </ul>
   </nav>
 
-  <div class="flex-1 flex justify-end">
+  <div class="flex-1 flex justify-end items-center gap-4 md:gap-6">
     <Button
       href="https://wa.me/59175799191?text=Hola,%20me%20gustaria%20obtener%20más%20información%20sobre%20sus%20productos"
       target="_blank"
@@ -74,6 +75,7 @@ const {
     >
       Contactanos
     </Button>
+    <HeaderAuthControls client:load buttonClass={buttonClass} textColor={textColor} hoverColor={hoverColor} />
   </div>
 </header>
 

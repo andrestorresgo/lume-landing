@@ -1,0 +1,82 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import CheckoutPage from "../components/CheckoutPage.tsx";
+import SEOMeta from "../components/SEOMeta.astro";
+
+const checkoutSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Finalizar Compra - LUMÉ",
+  "description": "Completa de forma segura tu adquisición de joyería artesanal con intenciones.",
+  "url": "https://lume-landing-murex.vercel.app/checkout"
+};
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <SEOMeta 
+      title="Finalizar Compra - Conexión de Pago Segura | LUMÉ"
+      description="Pasarela segura para finalizar tu compra. Adquiere joyería artesanal con intenciones auténticas y piedras naturales seleccionadas."
+      canonicalPath="/checkout"
+      schema={checkoutSchema}
+    />
+    
+    <!-- Google Fonts for Editorial Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+  </head>
+
+  <body class="bg-[#fbf9f6] text-[#1C1917] font-sans antialiased min-h-screen overflow-x-hidden">
+    <!-- Header styled with charcoal colors for readability on light background -->
+    <Header 
+      activePath="/checkout" 
+      textColor="text-[#1C1917]" 
+      logoColor="text-[#1C1917]" 
+      activeColor="text-[#7C0A12]"
+      buttonClass="text-[#1C1917] border-[#1C1917]/20 hover:bg-[#1C1917]/5 focus:ring-[#1C1917]/10"
+    />
+    
+    <main>
+      <!-- React island mounted with client:load as required for runtime interactions -->
+      <CheckoutPage client:load />
+    </main>
+
+    <!-- Footer section matching editorial style -->
+    <footer class="bg-[#fbf9f6] w-full py-16 border-t border-[#78716C]/25 mt-12">
+      <div class="flex flex-col items-center gap-6 px-8 max-w-7xl mx-auto">
+        <a class="font-heading text-3xl text-[#1C1917] tracking-tighter" href="/">LUMÉ</a>
+        <nav class="flex flex-wrap justify-center gap-6 md:gap-12 text-sm text-[#78716C] uppercase tracking-wider font-semibold">
+          <a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Privacidad</a>
+          <a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Términos</a>
+          <a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Envíos</a>
+          <a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Cuidado de Piezas</a>
+        </nav>
+        <p class="text-[10px] text-[#78716C]/60 mt-4 uppercase tracking-widest">
+          © 2026 LUMÉ Jewelry. Hecho a mano.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  /* Page-specific font-family overrides to align with editorial design */
+  .font-heading {
+    font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", Times, serif !important;
+  }
+  
+  .font-sans {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  }
+</style>
