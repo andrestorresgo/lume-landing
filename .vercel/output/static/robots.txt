@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://lume-landing-murex.vercel.app/sitemap-index.xml
