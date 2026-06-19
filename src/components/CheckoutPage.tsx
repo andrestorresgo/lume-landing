@@ -17,6 +17,11 @@ import {
   CheckCircle,
 } from "@phosphor-icons/react";
 import confetti from "canvas-confetti";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import qrImage from "../assets/qr.jpeg";
+
+// Configure the default active payment tab: "qr" or "paypal"
+const DEFAULT_PAYMENT_METHOD = "qr";
 
 function CheckoutPageContent() {
   const { user, cart, cartSubtotal, authLoading, clearCart } = useAuth();
@@ -25,6 +30,8 @@ function CheckoutPageContent() {
     paypalOrderId: string;
     total: number;
   } | null>(null);
+
+  const [activeTab, setActiveTab] = useState<string>(DEFAULT_PAYMENT_METHOD);
 
   // Keep a local copy of cart items upon successful checkout so we can display them in the confirmation screen
   const [purchasedItems, setPurchasedItems] = useState<typeof cart>([]);
@@ -310,11 +317,56 @@ function CheckoutPageContent() {
             </span>
           </div>
 
-          {/* Checkout Button React Island */}
-          <CheckoutButton
-            onSuccess={handlePaymentSuccess}
-            cartSubtotal={cartSubtotal}
-          />
+          {/* Payment Tabs (QR Code / PayPal) */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-2">
+            <TabsList variant="line" className="w-full border-b border-[#78716C]/15 gap-8 bg-transparent justify-start h-10 px-0">
+              <TabsTrigger
+                value="qr"
+                className="uppercase tracking-widest text-[11px] font-semibold py-2 px-0 data-active:text-[#7C0A12] text-[#78716C] transition-colors duration-200 border-none rounded-none after:bg-[#7C0A12] cursor-pointer"
+              >
+                Pago con QR
+              </TabsTrigger>
+              <TabsTrigger
+                value="paypal"
+                className="uppercase tracking-widest text-[11px] font-semibold py-2 px-0 data-active:text-[#7C0A12] text-[#78716C] transition-colors duration-200 border-none rounded-none after:bg-[#7C0A12] cursor-pointer"
+              >
+                PayPal
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="qr" className="mt-6 flex flex-col gap-4 text-center">
+              <div className="bg-[#fbf9f6] border border-[#78716C]/10 p-5 flex flex-col items-center">
+                <img
+                  src={typeof qrImage === "string" ? qrImage : (qrImage as any).src}
+                  alt="Código QR de Pago Banco Mercantil Santa Cruz"
+                  className="max-w-[220px] w-full h-auto object-contain border-2 border-white shadow-md mx-auto"
+                />
+                <p className="text-xs text-[#78716C] leading-relaxed mt-4 max-w-[280px] mx-auto font-medium">
+                  Escanea este código QR con tu app bancaria móvil para pagar.
+                </p>
+                <div className="w-full h-px bg-[#78716C]/10 my-3"></div>
+                <p className="text-[10px] text-[#78716C]/70 leading-normal max-w-[280px] mx-auto">
+                  Una vez realizado el pago, nuestro equipo validará la transacción para proceder con el envío de tus piezas con intención.
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="paypal" className="mt-6">
+              {/* Load PayPal Buttons only when active to guarantee proper width layout calculation */}
+              {activeTab === "paypal" ? (
+                <CheckoutButton
+                  onSuccess={handlePaymentSuccess}
+                  cartSubtotal={cartSubtotal}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-6 gap-2 border border-[#78716C]/10 bg-[#fbf9f6]">
+                  <p className="text-[10px] text-[#78716C] uppercase tracking-wider">
+                    Selecciona esta pestaña para iniciar PayPal...
+                  </p>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
