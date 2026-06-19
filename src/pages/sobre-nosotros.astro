@@ -1,0 +1,388 @@
+---
+// src/pages/sobre-nosotros.astro
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Button from '../components/Button.astro';
+import AboutHero from '../components/AboutHero.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import SEOMeta from '../components/SEOMeta.astro';
+import { InstagramCarousel } from '../components/InstagramCarousel';
+import { Image } from 'astro:assets';
+
+// Types for Behold.so JSON feed
+interface BeholdPostSize {
+  width: number;
+  height: number;
+  mediaUrl: string;
+}
+
+interface BeholdPost {
+  id: string;
+  caption?: string;
+  permalink: string;
+  timestamp: string;
+  mediaType: string;
+  mediaUrl: string;
+  prunedCaption?: string;
+  sizes: {
+    small?: BeholdPostSize;
+    medium?: BeholdPostSize;
+    large?: BeholdPostSize;
+    full?: BeholdPostSize;
+  };
+}
+
+interface BeholdFeedResponse {
+  username: string;
+  posts: BeholdPost[];
+}
+
+const FEED_URL = 'https://feeds.behold.so/GHHPgau9U2x31Z726AtA';
+
+// Dynamic feed state
+let posts: BeholdPost[] = [];
+let errorMsg: string | null = null;
+
+// Fallback posts in case the server-side fetch fails
+const fallbackPosts: BeholdPost[] = [
+  {
+    id: "fb_1",
+    caption: "Hecho a mano. Hecho para ti. Joyas creadas para acompañarte en tu día a día.",
+    permalink: "https://www.instagram.com/lumebynata",
+    timestamp: "2026-06-19T00:00:00Z",
+    mediaType: "IMAGE",
+    mediaUrl: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
+    sizes: {}
+  },
+  {
+    id: "fb_2",
+    caption: "Piedras con intención: Cuarzo Cristal para limpiar tu energía y guiar tus pasos.",
+    permalink: "https://www.instagram.com/lumebynata",
+    timestamp: "2026-06-18T00:00:00Z",
+    mediaType: "IMAGE",
+    mediaUrl: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
+    sizes: {}
+  },
+  {
+    id: "fb_3",
+    caption: "Cada detalle cuenta. Trabajando con plata de ley en nuestro taller.",
+    permalink: "https://www.instagram.com/lumebynata",
+    timestamp: "2026-06-17T00:00:00Z",
+    mediaType: "IMAGE",
+    mediaUrl: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
+    sizes: {}
+  },
+  {
+    id: "fb_4",
+    caption: "Nuestra colección permanente busca conectar contigo.",
+    permalink: "https://www.instagram.com/lumebynata",
+    timestamp: "2026-06-16T00:00:00Z",
+    mediaType: "IMAGE",
+    mediaUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800",
+    sizes: {}
+  }
+];
+
+// Perform server-side fetch at build time (SSG)
+try {
+  const response = await fetch(FEED_URL);
+  if (!response.ok) {
+    throw new Error(`Feed status error: ${response.statusText}`);
+  }
+  const data = await response.json() as BeholdFeedResponse;
+  posts = data.posts || [];
+} catch (e: any) {
+  console.error("Error fetching Instagram feed, using fallbacks:", e);
+  errorMsg = e.message;
+  posts = fallbackPosts;
+}
+
+// Return medium size image url if available, otherwise original mediaUrl
+const getImageUrl = (post: BeholdPost) => {
+  return post.sizes?.medium?.mediaUrl || post.mediaUrl;
+};
+
+// JSON-LD schema for AboutPage
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://lume-landing-murex.vercel.app/sobre-nosotros/#webpage",
+      "url": "https://lume-landing-murex.vercel.app/sobre-nosotros",
+      "name": "Sobre Nosotros - LUMÉ",
+      "description": "Conoce la historia, valores y el proceso artesanal detrás de las piezas de joyería de intención de LUMÉ.",
+      "inLanguage": "es"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://lume-landing-murex.vercel.app/#organization",
+      "name": "LUMÉ Jewelry",
+      "url": "https://lume-landing-murex.vercel.app/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://lume-landing-murex.vercel.app/apple-touch-icon.png"
+      }
+    }
+  ]
+};
+---
+
+<html lang="es">
+	<head>
+		<GoogleAnalytics measurementId="G-JK7FNYNZ5R" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<SEOMeta 
+			title="Sobre Nosotros - Joyería de Intención y Diseño | LUMÉ"
+			description="Conoce el origen de LUMÉ, la dirección de Nata y el esmero puesto en cada pieza hecha a mano con gemas naturales y metales nobles en Bolivia."
+			canonicalPath="/sobre-nosotros"
+			schema={aboutSchema}
+		/>
+		
+		<!-- Google Fonts for Editorial Aesthetic -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+	</head>
+
+	<body class="bg-[#fbf9f6] text-[#1C1917] font-sans antialiased min-h-screen overflow-x-hidden">
+		<!-- Header styled with dark charcoal text for visibility on cream background -->
+		<Header 
+			activePath="/sobre-nosotros" 
+			textColor="text-[#1C1917]" 
+			logoColor="text-[#1C1917]" 
+			activeColor="text-[#7C0A12]"
+			buttonClass="text-[#1C1917] border-[#1C1917]/20 hover:bg-[#1C1917]/5 focus:ring-[#1C1917]/10"
+		/>
+		
+		<main class="w-full">
+			<!-- Hero Section -->
+			<AboutHero />
+
+			<!-- Brand Story Section -->
+			<section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto border-t border-[#78716C]/10 select-none">
+				<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+					<!-- Visual Story Column -->
+					<div class="lg:col-span-5 relative group overflow-hidden">
+						<div class="absolute inset-0 bg-[#7C0A12]/5 opacity-20 pointer-events-none z-10"></div>
+						<Image 
+							src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&q=80&w=800" 
+							alt="Proceso de trabajo en joyería" 
+							width={600}
+							height={800}
+							class="w-full aspect-[4/5] object-cover filter saturate-75 hover:scale-102 hover:saturate-100 transition-all duration-700 ease-out"
+						/>
+						<div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm p-4 border border-[#78716C]/10 text-center z-20">
+							<p class="font-heading italic text-[#7C0A12] text-sm">El valor de lo pausado y consciente.</p>
+						</div>
+					</div>
+
+					<!-- Narrative Column -->
+					<div class="lg:col-span-7 flex flex-col justify-center gap-6">
+						<span class="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-[#7C0A12]">
+							Nuestra Filosofía
+						</span>
+						<h2 class="font-heading text-3xl md:text-5xl text-[#1C1917] tracking-tight leading-tight">
+							El origen de LUMÉ: Joyas con alma
+						</h2>
+						<div class="w-16 h-[1px] bg-[#7C0A12]"></div>
+						
+						<p class="text-base text-[#78716C] font-light leading-relaxed">
+							LUMÉ nació como una búsqueda de conexión interna. De materializar en piezas de diseño diario los recordatorios de nuestra propia fuerza, intuición y serenidad. No creemos en la producción masiva, sino en la joyería lenta que respeta los tiempos de la materia y de la creación.
+						</p>
+						<p class="text-base text-[#78716C] font-light leading-relaxed">
+							Cada una de nuestras piezas es moldeada y acabada individualmente en nuestro taller por la diseñadora boliviana Nata. Empleamos únicamente gemas naturales seleccionadas a mano y metales nobles, garantizando que tu joya no solo sea duradera, sino verdaderamente irrepetible.
+						</p>
+
+						<!-- Small Quote Block -->
+						<div class="border-l-2 border-[#7C0A12] pl-4 py-1 my-2">
+							<p class="font-heading italic text-lg text-[#1C1917] leading-relaxed">
+								"No creamos accesorios, sino amuletos modernos que te acompañan en tu viaje cotidiano."
+							</p>
+							<p class="text-[10px] uppercase tracking-widest text-[#78716C]/70 font-semibold mt-1">— Nata, Fundadora</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Brand Values Cards -->
+			<section class="py-16 md:py-24 bg-[#FAF7F2] border-y border-[#78716C]/10 select-none">
+				<div class="max-w-7xl mx-auto px-4 md:px-8">
+					<div class="text-center max-w-xl mx-auto mb-16">
+						<span class="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-[#7C0A12] block mb-2">
+							Nuestros Pilares
+						</span>
+						<h2 class="font-heading text-2xl md:text-4xl text-[#1C1917] tracking-tight">
+							Valores que guían nuestras manos
+						</h2>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+						<!-- Value 1 -->
+						<div class="group bg-white p-8 border border-[#78716C]/10 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+							<div class="w-10 h-10 rounded-full bg-[#7C0A12]/5 flex items-center justify-center text-[#7C0A12] mb-6 group-hover:bg-[#7C0A12]/10 transition-colors">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 009 11a13.916 13.916 0 00-6-11v12a3 3 0 001.5 2.592M12 11c0-3.517 1.009-6.799 2.753-9.571m3.44 2.04l-.054.09A13.916 13.916 0 0015 11a13.916 13.916 0 006 11v-12a3 3 0 00-1.5-2.592M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+							</div>
+							<h3 class="font-heading text-xl text-[#1C1917] mb-3">Hecho a Mano</h3>
+							<p class="text-sm text-[#78716C] font-light leading-relaxed">
+								Cada imperfección sutil cuenta la historia del artesano. Moldeamos y pulimos cada joya sin prisas, dando vida a piezas únicas.
+							</p>
+						</div>
+
+						<!-- Value 2 -->
+						<div class="group bg-white p-8 border border-[#78716C]/10 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+							<div class="w-10 h-10 rounded-full bg-[#7C0A12]/5 flex items-center justify-center text-[#7C0A12] mb-6 group-hover:bg-[#7C0A12]/10 transition-colors">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+								</svg>
+							</div>
+							<h3 class="font-heading text-xl text-[#1C1917] mb-3">Intención y Energía</h3>
+							<p class="text-sm text-[#78716C] font-light leading-relaxed">
+								Seleccionamos cuarzos y gemas naturales por sus propiedades, actuando como anclajes físicos y espirituales para tu día a día.
+							</p>
+						</div>
+
+						<!-- Value 3 -->
+						<div class="group bg-white p-8 border border-[#78716C]/10 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+							<div class="w-10 h-10 rounded-full bg-[#7C0A12]/5 flex items-center justify-center text-[#7C0A12] mb-6 group-hover:bg-[#7C0A12]/10 transition-colors">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+								</svg>
+							</div>
+							<h3 class="font-heading text-xl text-[#1C1917] mb-3">Nobleza de Materiales</h3>
+							<p class="text-sm text-[#78716C] font-light leading-relaxed">
+								Utilizamos plata de ley 925 y baños en oro de origen responsable, asegurando acabados premium y una durabilidad excepcional.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Instagram Carousel Section (Mandatory) -->
+			<section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto overflow-hidden">
+				<div class="text-center max-w-2xl mx-auto mb-12">
+					<span class="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-[#7C0A12] block mb-2">
+						Instagram Feed
+					</span>
+					<h2 class="font-heading text-3xl md:text-4xl text-[#1C1917] tracking-tight">
+						Nuestra Comunidad
+					</h2>
+					<p class="text-xs md:text-sm text-[#78716C] font-light mt-3">
+						Síguenos en <a href="https://www.instagram.com/lumebynata" target="_blank" rel="noopener noreferrer" class="underline hover:text-[#7C0A12] font-medium transition-colors">@lumebynata</a> para ver nuevos diseños y procesos en tiempo real.
+					</p>
+				</div>
+
+				<!-- Carousel Island with lazy loaded layout and fetch priority optimized images -->
+				<div class="w-full">
+					<InstagramCarousel client:load>
+						{posts.map((post, idx) => (
+							<a 
+								href={post.permalink} 
+								target="_blank" 
+								rel="noopener noreferrer" 
+								class="group flex flex-col h-full bg-white border border-[#78716C]/10 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 select-none"
+							>
+								<!-- Image Optimization using Astro's Image component -->
+								<div class="relative aspect-square overflow-hidden bg-[#FAF7F2]">
+									<Image 
+										src={getImageUrl(post)} 
+										alt={post.caption || "Publicación de Instagram de LUMÉ"} 
+										width={400} 
+										height={400}
+										class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-103"
+										loading={idx < 2 ? "eager" : "lazy"}
+										fetchpriority={idx < 2 ? "high" : "low"}
+									/>
+									<div class="absolute inset-0 bg-[#7C0A12]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+								</div>
+								
+								<!-- Post Caption -->
+								<div class="p-5 flex flex-col justify-between flex-grow min-h-[120px]">
+									<p class="text-xs text-[#78716C] line-clamp-3 leading-relaxed font-light">
+										{post.caption || "Ver pieza en Instagram."}
+									</p>
+									<span class="text-[9px] uppercase tracking-widest text-[#7C0A12] font-semibold mt-4 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform duration-300">
+										Ver en Instagram →
+									</span>
+								</div>
+							</a>
+						))}
+					</InstagramCarousel>
+				</div>
+			</section>
+
+			<!-- Call-to-action Block (CTA) -->
+			<section class="py-20 px-6 max-w-7xl mx-auto">
+				<div class="w-full bg-[#7C0A12] text-white py-16 md:py-24 px-8 md:px-16 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 border border-[#7C0A12] select-none">
+					{/* Background Blur Overlay for organic texture */}
+					<div class="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay">
+						<Image 
+							src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800" 
+							alt="Textura de gemas" 
+							width={800}
+							height={400}
+							class="w-full h-full object-cover filter blur-[2px]"
+							loading="lazy"
+						/>
+					</div>
+					
+					<div class="w-full md:w-3/5 relative z-10 flex flex-col items-start gap-4">
+						<span class="text-[9px] uppercase tracking-widest text-white/70 font-semibold">Catálogo Permanente</span>
+						<h2 class="font-heading text-3xl md:text-5xl text-white leading-tight">
+							Lleva tu intención contigo.
+						</h2>
+						<div class="w-16 h-[1px] bg-white/50 my-2"></div>
+						<p class="text-sm md:text-base font-light max-w-xl text-white/90 leading-relaxed">
+							Explora nuestra selección completa de joyas hechas a mano. Encuentra la combinación de cuarzo, plata y diseño ideal para ti.
+						</p>
+					</div>
+
+					<div class="w-full md:w-auto relative z-10">
+						<Button 
+							href="/colecciones" 
+							class="text-[#7C0A12] bg-[#fbf9f6] border-transparent hover:bg-white focus:ring-white/20 text-xs uppercase tracking-widest font-semibold py-3 px-8"
+						>
+							Ver Colecciones
+						</Button>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Footer Section matching editorial style of the collections page -->
+		<footer class="bg-[#fbf9f6] w-full py-16 border-t border-[#78716C]/25 mt-12">
+			<div class="flex flex-col items-center gap-6 px-8 max-w-7xl mx-auto select-none">
+				<a class="font-heading text-3xl text-[#1C1917] tracking-tighter" href="/">LUMÉ</a>
+				<nav class="flex flex-wrap justify-center gap-6 md:gap-12 text-sm text-[#78716C] uppercase tracking-wider font-semibold">
+					<a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Privacidad</a>
+					<a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Términos</a>
+					<a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Envíos</a>
+					<a class="hover:text-[#7C0A12] transition-colors duration-300" href="#">Cuidado de Piezas</a>
+				</nav>
+				<p class="text-[10px] text-[#78716C]/60 mt-4 uppercase tracking-widest">
+					© 2026 LUMÉ Jewelry. Hecho a mano.
+				</p>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	.font-heading {
+		font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", Times, serif !important;
+	}
+	
+	.font-sans {
+		font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+	}
+</style>

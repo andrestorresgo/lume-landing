@@ -16,6 +16,23 @@ export default defineConfig({
   vite: {
       plugins: [tailwindcss()],
     },
+  image: {
+    domains: ['behold.pictures', 'images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.cdninstagram.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.behold.pictures',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.unsplash.com',
+      }
+    ]
+  },
 
   integrations: [
     react(),

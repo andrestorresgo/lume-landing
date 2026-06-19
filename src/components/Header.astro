@@ -56,9 +56,12 @@ const {
         </a>
       </li>
       <li>
-        <span class={`nav-link cursor-pointer ${hoverColor}`}>
+        <a
+          href="/sobre-nosotros"
+          class={`nav-link ${activePath === "/sobre-nosotros" ? "active " + activeColor : ""} ${hoverColor}`}
+        >
           Sobre nosotros
-        </span>
+        </a>
       </li>
       <li>
         <span class={`nav-link cursor-pointer ${hoverColor}`}> Contacto </span>
