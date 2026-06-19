@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import CheckoutButton from "./CheckoutButton";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
   CardContent,
@@ -24,7 +25,7 @@ import qrImage from "../assets/qr.jpeg";
 const DEFAULT_PAYMENT_METHOD = "qr";
 
 function CheckoutPageContent() {
-  const { user, cart, cartSubtotal, authLoading, clearCart } = useAuth();
+  const { user, cart, cartSubtotal, authLoading, cartLoading, clearCart } = useAuth();
   const [completedOrder, setCompletedOrder] = useState<{
     orderId: string;
     paypalOrderId: string;
@@ -203,7 +204,7 @@ function CheckoutPageContent() {
   }
 
   // Cart empty gate
-  if (cart.length === 0) {
+  if (!cartLoading && cart.length === 0) {
     return (
       <div className="min-h-screen bg-[#fbf9f6] flex items-center justify-center p-6">
         <div className="text-center flex flex-col items-center gap-4 max-w-sm">
@@ -246,40 +247,64 @@ function CheckoutPageContent() {
           <div className="w-12 h-0.5 bg-[#7C0A12]"></div>
 
           <div className="flex flex-col gap-6 mt-4">
-            {cart.map((item) => (
-              <div
-                key={item.product.id}
-                className="flex gap-4 py-4 border-b border-[#78716C]/10 items-center justify-between"
-              >
-                <div className="flex gap-4 items-center">
-                  <div className="size-16 bg-[#efeeeb] border border-[#78716C]/15 shrink-0 flex items-center justify-center">
-                    <ShoppingBag size={24} className="text-[#78716C]/60" />
+            {cartLoading ? (
+              Array.from({ length: 2 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex gap-4 py-4 border-b border-[#78716C]/10 items-center justify-between animate-fade-in"
+                >
+                  <div className="flex gap-4 items-center w-full">
+                    {/* Item Image Skeleton */}
+                    <div className="size-16 bg-[#efeeeb] border border-[#78716C]/15 shrink-0 flex items-center justify-center">
+                      <Skeleton className="size-full rounded-none bg-[#78716C]/5" />
+                    </div>
+                    {/* Item Description Skeleton */}
+                    <div className="flex flex-col gap-1.5 w-2/3">
+                      <Skeleton className="h-5 w-32 rounded-none bg-[#78716C]/15" />
+                      <Skeleton className="h-3.5 w-48 rounded-none bg-[#78716C]/10" />
+                      <Skeleton className="h-3 w-16 rounded-none bg-[#78716C]/10 mt-1" />
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <h3 className="font-heading text-lg text-[#1C1917] leading-tight font-medium">
-                      {item.product.name}
-                    </h3>
-                    <p className="text-xs text-[#78716C]">
-                      Piedra:{" "}
-                      <span className="font-semibold text-[#625d5b]">
-                        {item.product.stone}
-                      </span>{" "}
-                      &bull; Intención:{" "}
-                      <span className="font-semibold text-[#625d5b]">
-                        {item.product.intention}
-                      </span>
-                    </p>
-                    <span className="text-[10px] text-[#78716C] uppercase font-bold mt-1">
-                      Cantidad: {item.quantity}
-                    </span>
-                  </div>
+                  {/* Item Price Skeleton */}
+                  <Skeleton className="h-5 w-12 rounded-none bg-[#78716C]/15 shrink-0" />
                 </div>
+              ))
+            ) : (
+              cart.map((item) => (
+                <div
+                  key={item.product.id}
+                  className="flex gap-4 py-4 border-b border-[#78716C]/10 items-center justify-between"
+                >
+                  <div className="flex gap-4 items-center">
+                    <div className="size-16 bg-[#efeeeb] border border-[#78716C]/15 shrink-0 flex items-center justify-center">
+                      <ShoppingBag size={24} className="text-[#78716C]/60" />
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <h3 className="font-heading text-lg text-[#1C1917] leading-tight font-medium">
+                        {item.product.name}
+                      </h3>
+                      <p className="text-xs text-[#78716C]">
+                        Piedra:{" "}
+                        <span className="font-semibold text-[#625d5b]">
+                          {item.product.stone}
+                        </span>{" "}
+                        &bull; Intención:{" "}
+                        <span className="font-semibold text-[#625d5b]">
+                          {item.product.intention}
+                        </span>
+                      </p>
+                      <span className="text-[10px] text-[#78716C] uppercase font-bold mt-1">
+                        Cantidad: {item.quantity}
+                      </span>
+                    </div>
+                  </div>
 
-                <span className="font-heading text-base font-bold text-[#1C1917] shrink-0">
-                  Bs. {(item.product.price * item.quantity).toFixed(2)}
-                </span>
-              </div>
-            ))}
+                  <span className="font-heading text-base font-bold text-[#1C1917] shrink-0">
+                    Bs. {(item.product.price * item.quantity).toFixed(2)}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -290,11 +315,15 @@ function CheckoutPageContent() {
           </h2>
 
           <div className="flex flex-col gap-3 text-xs border-b border-[#78716C]/10 pb-4 text-[#625d5b]">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>Subtotal</span>
-              <span className="font-semibold">
-                Bs. {cartSubtotal.toFixed(2)}
-              </span>
+              {cartLoading ? (
+                <Skeleton className="h-4 w-16 rounded-none bg-[#78716C]/15" />
+              ) : (
+                <span className="font-semibold">
+                  Bs. {cartSubtotal.toFixed(2)}
+                </span>
+              )}
             </div>
             <div className="flex justify-between">
               <span>Envío (Colección Permanente)</span>
@@ -312,13 +341,26 @@ function CheckoutPageContent() {
             <span className="font-heading text-lg text-[#1C1917] font-semibold">
               Total del Pedido
             </span>
-            <span className="font-heading text-xl text-[#7C0A12] font-bold">
-              Bs. {cartSubtotal.toFixed(2)}
-            </span>
+            {cartLoading ? (
+              <Skeleton className="h-6 w-20 rounded-none bg-[#7C0A12]/20" />
+            ) : (
+              <span className="font-heading text-xl text-[#7C0A12] font-bold">
+                Bs. {cartSubtotal.toFixed(2)}
+              </span>
+            )}
           </div>
 
           {/* Payment Tabs (QR Code / PayPal) */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-2">
+          {cartLoading ? (
+            <div className="flex flex-col gap-4 mt-2">
+              <div className="flex border-b border-[#78716C]/15 gap-8 h-10 items-center">
+                <Skeleton className="h-4 w-20 rounded-none bg-[#78716C]/15" />
+                <Skeleton className="h-4 w-16 rounded-none bg-[#78716C]/10" />
+              </div>
+              <Skeleton className="h-[280px] w-full rounded-none bg-[#1C1917]/5" />
+            </div>
+          ) : (
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-2">
             <TabsList variant="line" className="w-full border-b border-[#78716C]/15 gap-8 bg-transparent justify-start h-10 px-0">
               <TabsTrigger
                 value="qr"
@@ -367,6 +409,7 @@ function CheckoutPageContent() {
               )}
             </TabsContent>
           </Tabs>
+          )}
         </div>
       </div>
     </div>

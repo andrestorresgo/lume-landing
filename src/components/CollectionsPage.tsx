@@ -14,6 +14,7 @@ import {
   Sparkle
 } from "@phosphor-icons/react"
 import mockData from "@/data/mockData.json"
+import { Skeleton } from "@/components/ui/skeleton"
 
 // Refactored Reusable Components
 import ProductCard from "./ProductCard"
@@ -318,8 +319,24 @@ function CollectionsPageContent({
       {/* Main Grid */}
       <main className="max-w-7xl mx-auto px-6 md:px-16 flex flex-col gap-16">
         {loadingProducts ? (
-          <div className="text-center py-20 font-heading text-xl text-[#78716C] font-light">
-            Cargando colección...
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="flex flex-col">
+                {/* Realistic Card Image Skeleton */}
+                <div className="relative overflow-hidden aspect-[3/4] bg-[#efeeeb] mb-4 border border-[#78716C]/15">
+                  <Skeleton className="w-full h-full rounded-none bg-[#78716C]/5" />
+                </div>
+                
+                {/* Details Skeleton aligning with CardHeader */}
+                <div className="flex flex-row items-start justify-between p-0 gap-1">
+                  <div className="flex flex-col gap-1 w-2/3">
+                    <Skeleton className="h-5 w-10/12 rounded-none bg-[#78716C]/15" />
+                    <Skeleton className="h-3 w-7/12 rounded-none bg-[#78716C]/10 mt-1" />
+                  </div>
+                  <Skeleton className="h-5 w-12 rounded-none bg-[#78716C]/15 shrink-0 mt-0.5" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-[#78716C]/30 bg-[#f5f3f0] flex flex-col items-center gap-4">
