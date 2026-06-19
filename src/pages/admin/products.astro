@@ -1,0 +1,71 @@
+---
+import '../../styles/global.css';
+import AdminProductsDashboard from '../../components/admin/AdminProductsDashboard';
+import SEOMeta from '../../components/SEOMeta.astro';
+import { createServerClient } from '../../lib/supabaseServer';
+
+export const prerender = false;
+
+// Initialize server-side Supabase client and retrieve session info
+const { client, accessToken } = createServerClient(Astro.cookies);
+
+// Retrieve current authenticated admin details
+const { data: { user } } = await client.auth.getUser(accessToken);
+const userEmail = user?.email || "admin@lume.com";
+
+// Fetch initial list of products directly from the database on the server
+const { data: rawProducts, error } = await client
+  .from("products")
+  .select("*")
+  .order("created_at", { ascending: false });
+
+if (error) {
+  console.error("Error loading products on the server:", error.message);
+}
+
+const products = (rawProducts || []).map((p: any) => ({
+  id: p.id,
+  name: p.name,
+  description: p.description,
+  price: Number(p.price),
+  tag: p.tag,
+  stone: p.stone,
+  intention: p.intention,
+  is_featured: p.is_featured,
+}));
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href="/favicon.ico" />
+    
+    <SEOMeta 
+      title="LUMÉ - Gestión de Productos"
+      description="Dashboard de administración de LUMÉ."
+    />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+  </head>
+
+  <body class="bg-[#FBF9F6] font-sans antialiased min-h-screen selection:bg-[#7C0A12] selection:text-white">
+    <AdminProductsDashboard client:load initialProducts={products} userEmail={userEmail} />
+  </body>
+</html>
+
+<style is:global>
+  .font-heading {
+    font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", Times, serif !important;
+  }
+  
+  .font-sans {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  }
+</style>

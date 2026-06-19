@@ -7,6 +7,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   authLoading: boolean;
+  cartLoading: boolean;
   cart: CartItem[];
   cartCount: number;
   cartSubtotal: number;
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [cartLoading, setCartLoading] = useState(true);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -49,6 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error('Failed to load guest cart:', err);
       setCart([]);
+    } finally {
+      setCartLoading(false);
     }
   };
 
@@ -63,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Trigger merging local cart into Supabase
   const triggerCartMerge = useCallback(async (userId: string) => {
+    setCartLoading(true);
     try {
       const stored = localStorage.getItem(GUEST_CART_KEY);
       const guestItems: CartItem[] = stored ? JSON.parse(stored) : [];
@@ -77,6 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Fallback: fetch user's cart anyway
       const userCart = await fetchUserCart(userId);
       setCart(userCart);
+    } finally {
+      setCartLoading(false);
     }
   }, []);
 
@@ -111,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (event === 'SIGNED_OUT') {
         setCart([]);
         localStorage.removeItem(GUEST_CART_KEY);
+        setCartLoading(false);
       }
       setAuthLoading(false);
     });
@@ -215,6 +223,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         session,
         authLoading,
+        cartLoading,
         cart,
         cartCount,
         cartSubtotal,
